@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OCT IMAGE CLASSIFICATION</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Reenie+Beanie&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/x-icon" href="/application/img/favicon.png" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #faf6f6;
+        scroll-behavior: smooth;
+        overflow-x: hidden;
+      }
+
+      nav {
+        background-color: white;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        height: 14vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: row;
+      }
+
+      nav ul {
+        list-style-type: none;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #ul1 {
+        position: absolute;
+        left: 4vw;
+      }
+
+      #logo {
+        font-weight: bold;
+        cursor: default;
+      }
+
+      #ul2 {
+        position: absolute;
+        right: 4vw;
+        gap: 4vw;
+      }
+
+      #ul2 a:hover {
+        color: #4caf50;
+      }
+
+      nav a {
+        color: black;
+        font-size: large;
+        text-decoration: none;
+        font-weight: 500;
+      }
+
+      #detect {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 86vh;
+        background-color: #faf6f6;
+      }
+
+      .custom-file-upload {
+        display: inline-block;
+        padding: 30px;
+        border: 2px solid #4caf50;
+        border-radius: 50px;
+        background-color: black;
+        width: 40vw;
+        color: white;
+        font-size: large;
+        cursor: pointer;
+        text-align: center;
+        transition: background-color 0.3s ease;
+        position: absolute;
+        top: 35vh;
+      }
+
+      .custom-file-upload input[type="file"] {
+        display: none;
+      }
+
+      .custom-file-upload:hover {
+        background-color: #4caf50;
+        border-color: black;
+      }
+
+      #predictButton {
+        display: inline-block;
+        padding: 12px 20px;
+        border: 2px solid #4caf50;
+        border-radius: 50px;
+        background-color: black;
+        color: white;
+        font-size: medium;
+        cursor: pointer;
+        text-align: center;
+        transition: background-color 0.3s ease;
+        display: none;
+        position: absolute;
+        top: 55vh;
+      }
+
+      #predictButton:hover {
+        background-color: #4caf50;
+        border-color: black;
+      }
+
+      #result1 {
+        cursor: default;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        font-size: x-large;
+        position: absolute;
+        top: 70vh;
+        gap: 2vh;
+      }
+
+      #result2 {
+        position: absolute;
+        top: 22vh;
+        left: 4vw;
+        height: 16vw;
+        width: 16vw;
+      }
+
+      #Img {
+        display: none;
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      #eye {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100vh;
+        background-color: white;
+        position: relative;
+      }
+
+      #eye_1 {
+        position: absolute;
+        top: 10vh;
+        left: 4vw;
+        width: 33vw;
+      }
+
+      #EyeAnatomy {
+        height: auto;
+        width: 33vw;
+        object-fit: contain;
+      }
+
+      .fade-in {
+        opacity: 0; /* Start invisible */
+        transition: opacity 2s ease-in; /* Transition for fade-in effect */
+      }
+
+      .fade-in.visible {
+        opacity: 1; /* Make it visible */
+      }
+
+      @keyframes slide-in-right {
+        from {
+          transform: translateX(100%); /* Start from the right */
+          opacity: 0; /* Start invisible */
+        }
+        to {
+          transform: translateX(0); /* Move to original position */
+          opacity: 1; /* Make it fully visible */
+        }
+      }
+
+      #eye_2 {
+        cursor: default;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 1vh;
+        position: absolute;
+        top: 10vh;
+        right: 4vw;
+        width: 45vw;
+        padding: 20px;
+        background-color: rgba(255, 255, 255, 0.9);
+        border: 2px solid #4caf50;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        text-align: left;
+        opacity: 0; /* Start as invisible */
+        transform: translateX(100vw); /* Start off-screen to the right */
+        transition: opacity 1.5s ease-in-out, transform 1s ease-in-out; /* Smooth transition */
+      }
+
+      #eye_2.visible {
+        opacity: 1; /* Make it visible */
+        transform: translateX(0); /* Move to original position */
+      }
+
+      #eye_2 h2 {
+        font-size: large;
+        color: #333;
+      }
+
+      #eye_2 p {
+        font-size: medium;
+        color: #555;
+        line-height: 1.6;
+      }
+
+      #eye_3 {
+        cursor: default;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 1vh;
+        position: absolute;
+        bottom: 8vh;
+        right: 4vw;
+        width: 90vw;
+        padding: 20px;
+        background-color: rgba(255, 255, 255, 0.9);
+        border: 2px solid #4caf50;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        text-align: left;
+        opacity: 0; /* Start as invisible */
+        transform: translateX(100vw); /* Start off-screen to the right */
+        transition: opacity 1.5s ease-in-out, transform 1s ease-in-out; /* Smooth transition */
+      }
+
+      #eye_3.visible {
+        opacity: 1; /* Make it visible */
+        transform: translateX(0); /* Move to original position */
+      }
+
+      #eye_3 h2 {
+        font-size: large;
+        color: #333;
+      }
+
+      #eye_3 p {
+        font-size: medium;
+        color: #555;
+        line-height: 1.6;
+      }
+
+      #oct {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 200vh;
+        background-color: white;
+        cursor: default;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+        color: #333;
+        margin-bottom: 10vh;
+      }
+
+      .timeline {
+        width: 80%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .timeline-item {
+        background-color: #e8f5e9;
+        border-left: 5px solid #4caf50;
+        padding: 5vh;
+        margin: 3vh 0;
+        width: 100%;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        opacity: 0; /* Start hidden */
+        transform: translateY(50px); /* Start with an offset */
+        transition: transform 0.6s ease-out, opacity 0.6s ease-out;
+      }
+
+      .timeline-item h2 {
+        font-size: 1.5rem;
+        color: #2e7d32;
+        margin-bottom: 2vh;
+      }
+
+      .timeline-item p {
+        font-size: 1rem;
+        color: #555;
+      }
+
+      .timeline-item:last-child {
+        background-color: #f1f8e9;
+        border-left: 5px solid #388e3c;
+      }
+
+      .timeline-item.visible {
+        opacity: 1;
+        transform: translateY(0); /* Move into place */
+      }
+
+      .hidden {
+        opacity: 0;
+        transform: translateY(15vh); /* Start off-screen */
+      }
+
+      #model {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 160vh;
+        background-color: #f9fbfc;
+        cursor: default;
+        position: relative;
+      }
+
+      #model_1 {
+        width: 50vw;
+      }
+
+      /* Image styling */
+      #RandomForest {
+        height: auto;
+        width: 50vw;
+        object-fit: contain;
+        opacity: 0; /* Start invisible */
+        transform: scale(0.9); /* Start slightly smaller */
+        transition: opacity 1s ease-in-out, transform 1s ease-in-out; /* Smooth transition */
+      }
+
+      #RandomForest.visible {
+        opacity: 1; /* Fade in */
+        transform: scale(1); /* Scale to full size */
+      }
+
+      #model_info p {
+        font-family: "Reenie Beanie", serif;
+        font-weight: 400;
+        font-style: normal;
+        font-size: 1.8rem;
+        color: #333;
+        text-align: justify;
+        line-height: 1.6;
+        width: 80vw;
+      }
+
+      #copywrite {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 10vh;
+        background-color: #f9fbfc;
+        cursor: default;
+        position: relative;
+      }
+
+      #copywrite p {
+        margin: 0;
+      }
+
+      @media only screen and (max-width: 1000px) {
+        body {
+          display: none;
+        }
+      }
+
+      @media only screen and (min-width: 1000px) and (max-width: 1200px) {
+        #eye_2 h2 {
+          font-size: medium;
+        }
+
+        #eye_2 p {
+          font-size: small;
+        }
+
+        #eye_3 h2 {
+          font-size: medium;
+        }
+
+        #eye_3 p {
+          font-size: small;
+        }
+      }
+
+      @media only screen and (min-width: 1300px) and (max-width: 1400px) {
+        #eye_2 h2 {
+          font-size: x-large;
+        }
+
+        #eye_2 p {
+          font-size: large;
+        }
+
+        #eye_3 h2 {
+          font-size: x-large;
+        }
+
+        #eye_3 p {
+          font-size: large;
+        }
+
+        #model_info p {
+          font-size: 2.1rem;
+        }
+      }
+
+      @media only screen and (min-width: 1400px) {
+        nav a {
+          font-size: x-large;
+        }
+
+        .custom-file-upload {
+          font-size: x-large;
+        }
+
+        #predictButton {
+          font-size: large;
+        }
+
+        #result1 {
+          font-size: xx-large;
+        }
+
+        #eye_2 h2 {
+          font-size: xx-large;
+        }
+
+        #eye_2 p {
+          font-size: x-large;
+        }
+
+        #eye_3 h2 {
+          font-size: xx-large;
+        }
+
+        #eye_3 p {
+          font-size: x-large;
+        }
+
+        h1 {
+        font-size: 3.5rem;
+      }
+
+        .timeline-item h2 {
+          font-size: 2.2rem;
+        }
+
+        .timeline-item p {
+          font-size: 1.5rem;
+        }
+
+        #model_info p {
+          font-size: 2.8rem;
+        }
+
+        #copywrite p {
+          font-size: x-large;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <ul id="ul1">
+        <li><a href="" id="logo">OCT IMAGE CLASSIFICATION</a></li>
+      </ul>
+      <ul id="ul2">
+        <li><a href="">Identify</a></li>
+        <li><a href="#eye">Vision</a></li>
+        <li><a href="#oct">Imaging</a></li>
+        <li><a href="#model">Analysis</a></li>
+      </ul>
+    </nav>
+    <section id="detect">
+      <label for="imageInput" class="custom-file-upload">
+        Choose File
+        <input type="file" id="imageInput" accept="image/*" />
+      </label>
+      <button id="predictButton">Predict</button>
+      <div id="result1"></div>
+      <div id="result2"><img src="" alt="" id="Img" /></div>
+    </section>
+    <section id="eye">
+      <div id="eye_1">
+        <img
+          src="/application/img/EyeAnatomy.png"
+          alt=""
+          id="EyeAnatomy"
+          class="fade-in"
+        />
+      </div>
+      <div id="eye_2">
+        <h2>The Human Eye</h2>
+        <p>
+          The human eye is a complex organ responsible for vision, enabling us
+          to perceive the world around us. It functions by capturing light and
+          converting it into electrical signals that are sent to the brain. The
+          eye consists of several key structures, including the cornea, lens,
+          iris, and retina, each playing a vital role in the process of vision.
+          Proper functioning of these components is essential for clear sight
+          and overall eye health.
+        </p>
+      </div>
+      <div id="eye_3">
+        <h2>The Retina</h2>
+        <p>
+          The retina is a thin layer of tissue located at the back of the eye,
+          playing a crucial role in vision. It contains specialized
+          photoreceptor cells known as rods and cones that convert light into
+          neural signals. These signals are then transmitted to the brain via
+          the optic nerve, where they are processed to enable the perception of
+          shapes, colors, and movements. The retina is essential for clear
+          vision and overall eye health. In the context of Optical Coherence
+          Tomography (OCT) classification, analyzing the retinal structure is
+          vital for diagnosing various ocular diseases, such as age-related
+          macular degeneration (AMD) and diabetic retinopathy. OCT imaging
+          provides detailed cross-sectional views of the retina, allowing for
+          the assessment of its thickness and the detection of abnormalities,
+          which aids in timely intervention and treatment.
+        </p>
+      </div>
+    </section>
+    <section id="oct">
+      <h1>Timeline of Retinal Imaging Technology</h1>
+      <div class="timeline">
+        <div class="timeline-item hidden">
+          <h2>1960s: Fundus Photography</h2>
+          <p>
+            Captures 2D images of the retina. Provided an early means to
+            visually assess retinal health, but lacked depth information.
+          </p>
+        </div>
+        <div class="timeline-item hidden">
+          <h2>1970s: Fluorescein Angiography (FA)</h2>
+          <p>
+            Uses fluorescent dye to image retinal blood vessels. Good for
+            detecting blood vessel abnormalities but doesn't provide detailed
+            retinal structure.
+          </p>
+        </div>
+        <div class="timeline-item hidden">
+          <h2>1980s: Indocyanine Green Angiography (ICGA)</h2>
+          <p>
+            Improved on FA by visualizing deeper layers, especially the choroid,
+            but still lacked 3D data or cross-sectional detail.
+          </p>
+        </div>
+        <div class="timeline-item hidden">
+          <h2>1990s: Ultrasound Imaging (B-scan)</h2>
+          <p>
+            Allowed 2D cross-sectional imaging of the eye, but with lower
+            resolution compared to later methods.
+          </p>
+        </div>
+        <div class="timeline-item hidden">
+          <h2>2000s: Optical Coherence Tomography (OCT)</h2>
+          <p>
+            Introduced high-resolution, non-invasive cross-sectional imaging of
+            retinal layers, providing unparalleled detail of retinal structures.
+          </p>
+        </div>
+        <div class="timeline-item hidden">
+          <h2>Why OCT is Superior</h2>
+          <p>
+            OCT offers detailed, 3D imaging of retinal layers, allowing for
+            earlier and more precise diagnosis of conditions like macular
+            degeneration and glaucoma. It is non-invasive and provides real-time
+            imaging, unlike older techniques which rely on dyes or
+            lower-resolution scans.
+          </p>
+        </div>
+      </div>
+    </section>
+    <section id="model">
+      <div id="model_1">
+        <img src="/application/img/RandomForest.png" alt="" id="RandomForest" />
+      </div>
+      <div id="model_info">
+        <p>
+          <strong>Why Random Forest is Effective:</strong><br />
+          Random Forest is a powerful machine learning algorithm known for its
+          ability to handle large datasets with high accuracy. It is
+          particularly effective compared to other models because it uses an
+          ensemble of decision trees, which reduces the risk of overfitting and
+          improves generalization. Each tree in the forest is built on a random
+          subset of the data, which introduces diversity and helps in making
+          more robust predictions. Random Forest is also less sensitive to noisy
+          data and can handle both classification and regression tasks. By
+          averaging the predictions from multiple trees, it ensures a more
+          stable and reliable output, making it a go-to model for many complex
+          tasks.<br /><br />
+
+          <strong>Model Performance:</strong><br />
+          Training Accuracy: <strong>1.0</strong><br />
+          Testing Accuracy: <strong>0.8045</strong>
+        </p>
+      </div>
+    </section>
+    <section id="copywrite">
+      <p>&copy; 2024. All rights reserved.</p>
+    </section>
+    <script>
+      const fileInput = document.getElementById("imageInput");
+      const predictButton = document.getElementById("predictButton");
+      const imageElement = document.getElementById("Img"); // Get the image element
+
+      fileInput.addEventListener("change", () => {
+        if (fileInput.files.length > 0) {
+          predictButton.style.display = "block"; // Show the predict button
+        } else {
+          predictButton.style.display = "none"; // Hide the predict button
+        }
+      });
+
+      predictButton.addEventListener("click", async () => {
+        const file = fileInput.files[0];
+
+        if (!file) {
+          alert("PLEASE CHOOSE THE FILE !");
+          return;
+        }
+
+        const formData = new FormData();
+        formData.append("image", file);
+
+        const response = await fetch("http://127.0.0.1:5000/predict", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (response.ok) {
+          fetchPrediction(); // Call fetchPrediction to get the result
+        } else {
+          const result = await response.json();
+          const resultDiv = document.getElementById("result1");
+          resultDiv.innerHTML = `<p>Error: ${result.error}</p>`;
+        }
+      });
+
+      async function fetchPrediction() {
+        const response = await fetch("http://127.0.0.1:5000/get_result");
+        const resultDiv = document.getElementById("result1");
+
+        if (response.ok) {
+          const result = await response.json();
+
+          resultDiv.innerHTML = `<p>Predicted Class: ${
+            result.predicted_class
+          }</p>
+                                 <p>Probabilities - Normal: ${result.class_probabilities[0][0].toFixed(
+                                   2
+                                 )}, 
+                                 AMD: ${result.class_probabilities[0][1].toFixed(
+                                   2
+                                 )}</p>`;
+
+          // Set the base64 encoded image as the source of the image element
+          imageElement.src = "data:image/jpeg;base64," + result.image;
+          imageElement.style.display = "block"; // Show the image
+        } else {
+          const result = await response.json();
+          resultDiv.innerHTML = `<p>Error: ${result.error}</p>`;
+          imageElement.style.display = "none"; // Hide the image on error
+        }
+      }
+      window.onload = fetchPrediction;
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const eyeAnatomy = document.getElementById("EyeAnatomy");
+
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              eyeAnatomy.classList.add("visible"); // Add visible class when in view
+              observer.unobserve(entry.target); // Stop observing after it's visible
+              const eyeDiv1 = document.getElementById("eye_2");
+              const eyeDiv2 = document.getElementById("eye_3");
+              const rect1 = eyeDiv1.getBoundingClientRect();
+              const rect2 = eyeDiv2.getBoundingClientRect();
+              eyeDiv1.classList.add("visible");
+              eyeDiv2.classList.add("visible");
+            }
+          });
+        });
+
+        observer.observe(eyeAnatomy); // Observe the eye anatomy image
+      });
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible"); // Add visible class when in view
+            observer.unobserve(entry.target); // Stop observing once it's visible
+          }
+        });
+      });
+
+      // Target all timeline items
+      document.querySelectorAll(".timeline-item").forEach((item) => {
+        observer.observe(item); // Observe each item
+      });
+
+      const imageObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible"); // Add 'visible' class when in view
+            imageObserver.unobserve(entry.target); // Stop observing once visible
+          }
+        });
+      });
+
+      // Target the image by its ID
+      const image = document.getElementById("RandomForest");
+      if (image) {
+        imageObserver.observe(image); // Observe the image
+      }
+    </script>
+  </body>
+</html>
