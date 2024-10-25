@@ -373,6 +373,64 @@
         width: 80vw;
       }
 
+      #overlayButton {
+        position: absolute;
+        bottom: 15vh;
+        right: 10vw;
+        height: 6vh;
+        width: 6vh; /* Make width and height equal for a circle */
+        cursor: pointer;
+        border-radius: 50%; /* Circular shape */
+        background-color: #4caf50; /* Button color */
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7);
+        }
+        70% {
+          box-shadow: 0 0 0 20px rgba(76, 175, 80, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
+        }
+      }
+
+      #overlay {
+        display: none; /* Hidden by default */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(10px); /* Blur the background */
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        cursor: pointer;
+      }
+
+      /* Centered grid of images */
+      .overlay-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        cursor: default;
+      }
+
+      .overlay-content img {
+        width: 30vw;
+        height: 30vh;
+        border-radius: 5px;
+        object-fit: cover;
+      }
+
       #copywrite {
         display: flex;
         flex-direction: column;
@@ -676,14 +734,26 @@
           data and can handle both classification and regression tasks. By
           averaging the predictions from multiple trees, it ensures a more
           stable and reliable output, making it a go-to model for many complex
-          tasks.<br /><br />
+          tasks.
+          <span style="color: #2e7d32; font-weight: 600"
+            >Click the button for more info!</span
+          ><br /><br />
 
           <strong>Model Performance:</strong><br />
           Training Accuracy: <strong>1.0</strong><br />
           Testing Accuracy: <strong>0.8045</strong>
         </p>
       </div>
+      <button id="overlayButton"></button>
     </section>
+    <div id="overlay">
+      <div class="overlay-content">
+        <img src="./application/img/Figure_3.png" alt="Image 1" />
+        <img src="./application/img/Figure_1.png" alt="Image 2" />
+        <img src="./application/img/Figure_4.png" alt="Image 3" />
+        <img src="./application/img/Figure_2.png" alt="Image 4" />
+      </div>
+    </div>
     <section id="copywrite">
       <p>&copy; 2024. All rights reserved.</p>
     </section>
@@ -802,6 +872,22 @@
       if (image) {
         imageObserver.observe(image); // Observe the image
       }
+
+      // JavaScript to handle overlay visibility
+      const overlayButton = document.getElementById("overlayButton");
+      const overlay = document.getElementById("overlay");
+
+      // Show overlay on button click
+      overlayButton.addEventListener("click", () => {
+        overlay.style.display = "flex";
+      });
+
+      // Hide overlay on background click
+      overlay.addEventListener("click", (e) => {
+        if (e.target === overlay) {
+          overlay.style.display = "none";
+        }
+      });
     </script>
   </body>
 </html>
