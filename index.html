@@ -151,6 +151,34 @@
         width: 100%;
         object-fit: cover;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+      }
+
+      #overlay-0 {
+        display: none; /* Hidden by default */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(10px); /* Blur the background */
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        cursor: pointer;
+      }
+
+      .overlay-content-0 {
+        width: 50vw;
+        height: auto;
+        cursor: default;
+      }
+
+      .overlay-content-0 img {
+        width: 50vw;
+        height: auto;
+        object-fit: contain;
       }
 
       #eye {
@@ -623,6 +651,11 @@
       <button id="predictButton">Predict</button>
       <div id="result1"></div>
       <div id="result2"><img src="" alt="" id="Img" /></div>
+      <div id="overlay-0">
+        <div class="overlay-content-0">
+          <img src="" id="ZoomedImg" />
+        </div>
+      </div>
     </section>
     <section id="eye">
       <div id="eye_1">
@@ -759,6 +792,7 @@
       const fileInput = document.getElementById("imageInput");
       const predictButton = document.getElementById("predictButton");
       const imageElement = document.getElementById("Img"); // Get the image element
+      const ZoomedimageElement = document.getElementById("ZoomedImg");
 
       fileInput.addEventListener("change", () => {
         if (fileInput.files.length > 0) {
@@ -812,6 +846,7 @@
 
           // Set the base64 encoded image as the source of the image element
           imageElement.src = "data:image/jpeg;base64," + result.image;
+          ZoomedimageElement.src = "data:image/jpeg;base64," + result.image;
           imageElement.style.display = "block"; // Show the image
         } else {
           const result = await response.json();
@@ -884,6 +919,20 @@
       overlay.addEventListener("click", (e) => {
         if (e.target === overlay) {
           overlay.style.display = "none";
+        }
+      });
+
+      // ZOomed Img ...
+
+      const overlay0 = document.getElementById("overlay-0");
+
+      imageElement.addEventListener("click", () => {
+        overlay0.style.display = "flex";
+      });
+
+      overlay0.addEventListener("click", (e) => {
+        if (e.target === overlay0) {
+          overlay0.style.display = "none";
         }
       });
     </script>
