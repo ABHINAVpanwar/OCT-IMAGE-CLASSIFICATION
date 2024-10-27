@@ -71,6 +71,46 @@
         font-weight: 500;
       }
 
+      #server-alert {
+        cursor: default;
+        height: 14vh;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        background-color: white;
+        color: black;
+        font-weight: bold;
+        font-size: 1.1em;
+        opacity: 0;
+        z-index: 1000;
+        animation: fadeInOut 7s ease forwards; /* Animation over 7 seconds */
+      }
+
+      #server-alert p {
+        margin: 0;
+        padding: 0;
+      }
+
+      /* Fade in and out animation */
+      @keyframes fadeInOut {
+        0% {
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+        } /* Fade in */
+        80% {
+          opacity: 1;
+        } /* Hold */
+        100% {
+          opacity: 0;
+        } /* Fade out */
+      }
+
       #detect {
         display: flex;
         flex-direction: column;
@@ -632,6 +672,12 @@
     </style>
   </head>
   <body>
+    <div id="server-alert">
+      <p>
+        PLEASE ENSURE THE SERVER IS ACTIVE TO ACCESS ALL SITE FEATURES. IF IT IS
+        NOT RUNNING, KINDLY START THE SERVER.
+      </p>
+    </div>
     <nav>
       <ul id="ul1">
         <li><a href="" id="logo">OCT IMAGE CLASSIFICATION</a></li>
@@ -789,6 +835,14 @@
       <p>&copy; 2024. All rights reserved.</p>
     </section>
     <script>
+      setTimeout(() => {
+        const alert = document.getElementById("server-alert");
+        alert.style.display = "flex";
+        setTimeout(() => {
+          alert.style.display = "none";
+        }, 8000);
+      }, 3000);
+
       const fileInput = document.getElementById("imageInput");
       const predictButton = document.getElementById("predictButton");
       const imageElement = document.getElementById("Img"); // Get the image element
