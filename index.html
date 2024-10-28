@@ -221,6 +221,76 @@
         object-fit: contain;
       }
 
+      #infoButton {
+        background-color: transparent;
+        height: 3vw;
+        width: 3vw;
+        position: absolute;
+        bottom: 3vw;
+        right: 3vw;
+        cursor: pointer;
+      }
+
+      #blur {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(10px);
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        cursor: pointer;
+      }
+
+      .container {
+        font-size: 1.3vw;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        cursor: default;
+        width: 50vw;
+        max-height: 70vh;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+
+      .folder {
+        color: var(--folder-color, #4caf50);
+        user-select: none;
+        margin: 5px 0;
+        width: 100%;
+      }
+
+      .black-folder {
+        color: black;
+      }
+
+      .folder-content {
+        display: none;
+        padding-left: 20px;
+        width: 100%;
+      }
+
+      pre {
+        font-family: monospace;
+        white-space: pre-wrap;
+        margin: 0;
+      }
+
+      #index {
+        color: black;
+      }
+
       #eye {
         display: flex;
         flex-direction: column;
@@ -702,6 +772,85 @@
           <img src="" id="ZoomedImg" />
         </div>
       </div>
+      <img src="./application/img/info-button.png" id="infoButton" />
+      <div id="blur">
+        <div class="container">
+          <div class="folder" onclick="toggleFolder('root')">
+            |-- OCT IMAGE CLASSIFICATION DIRECTORY STRUCTURE
+          </div>
+          <div id="root" class="folder-content">
+            <div class="folder" onclick="toggleFolder('application')">
+              |-- application
+            </div>
+            <div id="application" class="folder-content">
+              <pre class="black-folder">|-- server.py</pre>
+              <div class="folder" onclick="toggleFolder('bin')">
+                <pre>|-- bin</pre>
+              </div>
+              <div id="bin" class="folder-content">
+                <pre>    |-- prediction_result.txt</pre>
+                <pre>    |-- temp_image.jpg</pre>
+              </div>
+              <div class="folder" onclick="toggleFolder('img')">
+                <pre>|-- img</pre>
+              </div>
+              <div id="img" class="folder-content">
+                <pre>    |-- EyeAnatomy.png</pre>
+                <pre>    |-- favicon.png</pre>
+              </div>
+            </div>
+            <div class="folder" onclick="toggleFolder('code')">|-- code</div>
+            <div id="code" class="folder-content">
+              <pre>|-- model_feature_extraction.py</pre>
+              <pre>|-- model_figures.py</pre>
+              <pre>|-- model_prediction.py</pre>
+              <pre>|-- model_training.py</pre>
+              <pre>|-- utils.py</pre>
+            </div>
+            <div class="folder" onclick="toggleFolder('data')">|-- data</div>
+            <div id="data" class="folder-content">
+              <pre>|-- merged_file.csv</pre>
+            </div>
+            <div class="folder" onclick="toggleFolder('dataset')">
+              |-- dataset
+            </div>
+            <div id="dataset" class="folder-content">
+              <div class="folder" onclick="toggleFolder('amd')">|-- AMD</div>
+              <div id="amd" class="folder-content">
+                <pre>|-- amd 1.jpg</pre>
+                <pre>|   .</pre>
+                <pre>|   .</pre>
+                <pre>|   .</pre>
+                <pre>|-- amd 2100.jpg</pre>
+              </div>
+              <div class="folder" onclick="toggleFolder('normal')">
+                |-- Normal
+              </div>
+              <div id="normal" class="folder-content">
+                <pre>|-- normal 1.jpg</pre>
+                <pre>|   .</pre>
+                <pre>|   .</pre>
+                <pre>|   .</pre>
+                <pre>|-- normal 2100.jpg</pre>
+              </div>
+            </div>
+            <div class="folder" onclick="toggleFolder('models')">
+              |-- models
+            </div>
+            <div id="models" class="folder-content">
+              <pre>|-- random_forest_model.pkl</pre>
+              <pre>|-- scaler.pkl</pre>
+            </div>
+            <div
+              class="folder"
+              id="index"
+              onclick="toggleFolder('application')"
+            >
+              |-- index.html
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
     <section id="eye">
       <div id="eye_1">
@@ -835,6 +984,15 @@
       <p>&copy; 2024. All rights reserved.</p>
     </section>
     <script>
+      function toggleFolder(folderId) {
+        var content = document.getElementById(folderId);
+        if (content.style.display === "block") {
+          content.style.display = "none";
+        } else {
+          content.style.display = "block";
+        }
+      }
+
       setTimeout(() => {
         const alert = document.getElementById("server-alert");
         alert.style.display = "flex";
@@ -987,6 +1145,21 @@
       overlay0.addEventListener("click", (e) => {
         if (e.target === overlay0) {
           overlay0.style.display = "none";
+        }
+      });
+
+      // Info
+
+      const IBM = document.getElementById("infoButton");
+      const blur = document.getElementById("blur");
+
+      IBM.addEventListener("click", () => {
+        blur.style.display = "flex";
+      });
+
+      blur.addEventListener("click", (e) => {
+        if (e.target === blur) {
+          blur.style.display = "none";
         }
       });
     </script>
