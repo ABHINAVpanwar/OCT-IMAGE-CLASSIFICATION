@@ -8,7 +8,7 @@ from sklearn.metrics import accuracy_score, confusion_matrix, classification_rep
 from sklearn.ensemble import RandomForestClassifier
 
 # Load the dataset
-df = 'C:/Users/Abhinav/OneDrive/Documents/MINI_PROJECT/data/merged_file.csv'
+df = 'data/merged_file.csv'
 data = pd.read_csv(df)
 
 # Select relevant features
