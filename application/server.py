@@ -4,10 +4,11 @@ from flask_cors import CORS
 import joblib
 import pandas as pd
 import os
-import sys
 import base64
+import tempfile
 
 # Insert the path to your utils directory
+import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../code')))
 from utils import compute_first_order_features, compute_glcm_properties
 
@@ -48,9 +49,13 @@ def predict():
     if file.filename == '':
         return jsonify({'error': 'No selected file'}), 400
 
-    # Read the image file into OpenCV
-    file.save("application/bin/temp_image.jpg")
-    image = cv2.imread("application/bin/temp_image.jpg")
+    # Use a temporary file to store the image
+    with tempfile.NamedTemporaryFile(delete=False, suffix='.jpg') as temp_file:
+        file.save(temp_file.name)
+        image = cv2.imread(temp_file.name)
+
+    if image is None:
+        return jsonify({'error': 'Could not read the image'}), 400
 
     # Predict the class and probabilities
     pred_class, pred_proba = predict_image(image)
@@ -73,7 +78,7 @@ def get_result():
             lines = f.readlines()
             if len(lines) >= 2:
                 predicted_class = lines[0].strip()
-                class_probabilities = eval(lines[1].strip())  # Use eval to convert string back to list
+                class_probabilities = list(map(float, lines[1].strip()[1:-1].split(',')))  # Convert string to list safely
                 
                 # Read the image file and encode it as base64
                 with open("application/bin/temp_image.jpg", "rb") as img_file:
@@ -87,4 +92,4 @@ def get_result():
     return jsonify({'error': 'No results found'}), 404
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)), debug=True)
