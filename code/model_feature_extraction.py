@@ -1,4 +1,4 @@
-data_folder = 'C:/Users/Abhinav/OneDrive/Documents/MINI_PROJECT/dataset'
+data_folder = 'dataset'
 
 import numpy as np
 import pandas as pd
