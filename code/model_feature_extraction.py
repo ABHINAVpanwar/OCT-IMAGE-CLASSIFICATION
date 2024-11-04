@@ -99,6 +99,6 @@ data['Target'] = data['class_label'].map(class_mapping)
 
 print(data)
 
-output_csv_path = 'C:/Users/Abhinav/OneDrive/Documents/MINI_PROJECT/data/merged_file.csv'
+output_csv_path = 'data/merged_file.csv'
 data.to_csv(output_csv_path, index=False)
 print(f"Data saved to {output_csv_path}")
