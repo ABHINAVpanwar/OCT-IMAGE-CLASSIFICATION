@@ -15,8 +15,8 @@ app = Flask(__name__)
 CORS(app)
 
 # Load the saved Random Forest model and scaler
-rf_model = joblib.load('C:/Users/Abhinav/OneDrive/Documents/MINI_PROJECT/models/random_forest_model.pkl')
-scaler = joblib.load('C:/Users/Abhinav/OneDrive/Documents/MINI_PROJECT/models/scaler.pkl')
+rf_model = joblib.load('models/random_forest_model.pkl')
+scaler = joblib.load('models/scaler.pkl')
 
 # Function to process and predict for a single image
 def predict_image(image):
