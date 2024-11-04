@@ -40,6 +40,10 @@ def predict_image(image):
 
     return prediction[0], prediction_proba
 
+@app.route('/')
+def index():
+    return jsonify({'message': 'Welcome to the OCT Image Classification API!'}), 200
+
 @app.route('/predict', methods=['POST'])
 def predict():
     if 'image' not in request.files:
@@ -63,10 +67,12 @@ def predict():
 
     if pred_class is not None:
         # Save the image to a temporary location
-        cv2.imwrite("application/bin/temp_image.jpg", image)
+        temp_image_path = "application/bin/temp_image.jpg"
+        cv2.imwrite(temp_image_path, image)
 
         # Store result in a text file in the app folder
-        with open("application/bin/prediction_result.txt", "w") as f:  # Save in the app directory
+        result_file_path = "application/bin/prediction_result.txt"
+        with open(result_file_path, "w") as f:
             f.write(f"{dictionary[pred_class]}\n")
             f.write(f"{pred_proba.tolist()}\n")
 
@@ -76,9 +82,9 @@ def predict():
 
 @app.route('/get_result', methods=['GET'])
 def get_result():
-    # Check for the result file in the app folder
-    if os.path.exists("application/bin/prediction_result.txt"):
-        with open("application/bin/prediction_result.txt", "r") as f:
+    result_file_path = "application/bin/prediction_result.txt"
+    if os.path.exists(result_file_path):
+        with open(result_file_path, "r") as f:
             lines = f.readlines()
             if len(lines) >= 2:
                 predicted_class = lines[0].strip()
