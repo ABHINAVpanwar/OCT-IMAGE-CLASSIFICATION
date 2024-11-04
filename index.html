@@ -1025,7 +1025,7 @@
         const formData = new FormData();
         formData.append("image", file);
 
-        const response = await fetch("http://127.0.0.1:5000/predict", {
+        const response = await fetch("http://127.0.0.1:10000/predict", {
           method: "POST",
           body: formData,
         });
@@ -1040,7 +1040,7 @@
       });
 
       async function fetchPrediction() {
-        const response = await fetch("http://127.0.0.1:5000/get_result");
+        const response = await fetch("http://127.0.0.1:10000/get_result");
         const resultDiv = document.getElementById("result1");
 
         if (response.ok) {
