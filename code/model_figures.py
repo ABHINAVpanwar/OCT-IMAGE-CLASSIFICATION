@@ -87,3 +87,58 @@ plt.title('ROC Curve - Random Forest')
 plt.legend(loc="lower right")
 plt.grid(False)
 plt.show()
+
+# Feature importance
+feature_importances = rf_model.feature_importances_
+features = X_df.columns
+importance_df = pd.DataFrame({"Feature": features, "Importance": feature_importances})
+importance_df = importance_df.sort_values(by="Importance", ascending=False)
+
+# Plot feature importance
+plt.figure(figsize=(10, 6))
+sns.barplot(x="Importance", y="Feature", data=importance_df, palette="viridis")
+plt.title("Feature Importance - Random Forest")
+plt.show()
+
+from sklearn.metrics import precision_recall_curve
+
+precision, recall, _ = precision_recall_curve(y_test, y_probs)
+
+# Plot Precision-Recall Curve
+plt.figure(figsize=(8, 6))
+plt.plot(recall, precision, color='purple', lw=2)
+plt.xlabel("Recall")
+plt.ylabel("Precision")
+plt.title("Precision-Recall Curve")
+plt.grid(False)
+plt.show()
+
+# Plot error distribution
+errors = y_test - y_test_pred
+plt.figure(figsize=(8, 6))
+sns.histplot(errors, kde=True, color="coral")
+plt.title("Error Distribution")
+plt.xlabel("Prediction Error")
+plt.ylabel("Frequency")
+plt.grid(False)
+plt.show()
+
+from sklearn.model_selection import learning_curve
+
+train_sizes, train_scores, test_scores = learning_curve(
+    rf_model, X_df, y, cv=5, train_sizes=np.linspace(0.1, 1.0, 10), random_state=42
+)
+
+train_scores_mean = np.mean(train_scores, axis=1)
+test_scores_mean = np.mean(test_scores, axis=1)
+
+# Plot learning curve
+plt.figure(figsize=(10, 6))
+plt.plot(train_sizes, train_scores_mean, 'o-', color="blue", label="Training Score")
+plt.plot(train_sizes, test_scores_mean, 'o-', color="green", label="Validation Score")
+plt.xlabel("Training Set Size")
+plt.ylabel("Accuracy Score")
+plt.title("Learning Curve - Random Forest")
+plt.legend(loc="best")
+plt.grid(False)
+plt.show()
