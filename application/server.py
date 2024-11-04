@@ -13,7 +13,8 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../c
 from utils import compute_first_order_features, compute_glcm_properties
 
 app = Flask(__name__)
-CORS(app, resources={r"/get_result": {"origins": "https://oct-image-classification.netlify.app"}})
+CORS(app, resources={r"/predict": {"origins": "https://oct-image-classification.netlify.app"},
+                     r"/get_result": {"origins": "https://oct-image-classification.netlify.app"}})
 
 # Load the saved Random Forest model and scaler
 rf_model = joblib.load('models/random_forest_model.pkl')
