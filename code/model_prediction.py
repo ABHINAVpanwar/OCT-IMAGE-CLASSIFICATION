@@ -4,8 +4,8 @@ import pandas as pd
 from utils import compute_first_order_features, compute_glcm_properties
 
 # Load the saved Random Forest model and scaler
-rf_model = joblib.load('C:/Users/Abhinav/OneDrive/Documents/MINI_PROJECT/models/random_forest_model.pkl')
-scaler = joblib.load('C:/Users/Abhinav/OneDrive/Documents/MINI_PROJECT/models/scaler.pkl')
+rf_model = joblib.load('models/random_forest_model.pkl')
+scaler = joblib.load('models/scaler.pkl')
 
 # Function to process and predict for a single image
 def predict_image(image_path):
@@ -35,7 +35,7 @@ def predict_image(image_path):
         print(f"Failed to load image: {image_path}")
         return None, None
 
-image_path = "C:/Users/Abhinav/OneDrive/Documents/MINI_PROJECT/dataset/AMD/amd_1047099_1.jpg"
+image_path = "dataset/AMD/amd_1047099_1.jpg"
 pred_class, pred_proba = predict_image(image_path)
 dictionary = {0.0:"Normal",1.0:"AMD"}
 print(f"Predicted class: {dictionary[pred_class]}")
