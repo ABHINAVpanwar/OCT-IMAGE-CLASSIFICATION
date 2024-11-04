@@ -88,7 +88,7 @@ def get_result():
             lines = f.readlines()
             if len(lines) >= 2:
                 predicted_class = lines[0].strip()
-                class_probabilities = list(map(float, lines[1].strip()[1:-1].split(',')))  # Convert string to list safely
+                class_probabilities = eval(lines[1].strip())  # Use eval to convert string back to list
                 
                 # Read the image file and encode it as base64
                 with open("application/bin/temp_image.jpg", "rb") as img_file:
