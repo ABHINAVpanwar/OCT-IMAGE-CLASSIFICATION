@@ -6,7 +6,7 @@ from sklearn.metrics import accuracy_score
 import joblib
 
 # Load dataset
-df = pd.read_csv('C:/Users/Abhinav/OneDrive/Documents/MINI_PROJECT/data/merged_file.csv')
+df = pd.read_csv('data/merged_file.csv')
 
 # Selecting features and target
 selected_features = ['mean_intensity', 'std_dev', 'median', 'variance', 'skewness', 'kurtosis', 'entropy',
@@ -28,8 +28,8 @@ rf_model = RandomForestClassifier(n_estimators=100, random_state=42)
 rf_model.fit(X_train, y_train)
 
 # Save the model and the scaler
-joblib.dump(rf_model, 'C:/Users/Abhinav/OneDrive/Documents/MINI_PROJECT/models/random_forest_model.pkl')
-joblib.dump(scaler, 'C:/Users/Abhinav/OneDrive/Documents/MINI_PROJECT/models/scaler.pkl')
+joblib.dump(rf_model, 'models/random_forest_model.pkl')
+joblib.dump(scaler, 'models/scaler.pkl')
 
 # Evaluation
 train_accuracy = accuracy_score(y_train, rf_model.predict(X_train))
