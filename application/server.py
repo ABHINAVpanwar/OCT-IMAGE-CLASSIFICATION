@@ -13,7 +13,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../c
 from utils import compute_first_order_features, compute_glcm_properties
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/get_result": {"origins": "https://oct-image-classification.netlify.app"}})
 
 # Load the saved Random Forest model and scaler
 rf_model = joblib.load('models/random_forest_model.pkl')
@@ -62,10 +62,14 @@ def predict():
     dictionary = {0.0: "Normal", 1.0: "AMD"}
 
     if pred_class is not None:
+        # Save the image to a temporary location
+        cv2.imwrite("application/bin/temp_image.jpg", image)
+
         # Store result in a text file in the app folder
         with open("application/bin/prediction_result.txt", "w") as f:  # Save in the app directory
             f.write(f"{dictionary[pred_class]}\n")
             f.write(f"{pred_proba.tolist()}\n")
+
         return jsonify({'success': True}), 200
     else:
         return jsonify({'error': 'Prediction failed'}), 500
