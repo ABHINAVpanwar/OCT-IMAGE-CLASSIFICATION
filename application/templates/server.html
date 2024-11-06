@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OCT IMAGE CLASSIFICATION</title>
+    <link rel="icon" type="image/x-icon" href="../img/favicon.png" />
+    <style>
+        /* Reset styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Main page styling */
+        body, html {
+            height: 100%;
+            width: 100%;
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #121212;
+            color: #FFFFFF;
+            padding: 20px;
+        }
+
+        /* Container for content */
+        .container {
+            max-width: 500px;
+            padding: 30px;
+            text-align: center;
+            background: #1f1f1f;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            cursor: default;
+        }
+
+        /* Header styling */
+        .container h1 {
+            font-size: 4vh;
+            margin-bottom: 20px;
+            color: #4CAF50;
+        }
+
+        /* Description paragraph styling */
+        .container p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #d1d1d1;
+            margin-bottom: 20px;
+            font-size: 2vh;
+        }
+
+        /* Button styling */
+        .start-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 24px;
+            font-size: 2.5vh;
+            font-weight: bold;
+            color: #1f1f1f;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+        }
+
+        /* Hover effect for button */
+        .start-button:hover {
+            background-color: #43a047;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to the OCT Image Classification API</h1>
+        <p>
+            Our OCT Image Classification API leverages machine learning to analyze retinal images. Upload an OCT image, and the API will classify it as either <strong>Normal</strong> or <strong>AMD</strong> (Age-related Macular Degeneration) with high accuracy.
+        </p>
+        <p>
+            This service integrates with our web platform, allowing easy uploads and instant predictions. Thank you for choosing our API for your medical imaging needs.
+        </p>
+        <a href="https://oct-image-classification.netlify.app/" class="start-button">Get Started</a>
+    </div>
+</body>
+</html>
