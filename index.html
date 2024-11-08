@@ -71,9 +71,9 @@
         font-weight: 500;
       }
 
-      #server-alert {
+      #info-alert {
         cursor: default;
-        height: 14vh;
+        height: 100vh;
         width: 100%;
         position: fixed;
         top: 0;
@@ -81,18 +81,52 @@
         align-items: center;
         justify-content: center;
         text-align: center;
+        flex-direction: column;
         background-color: white;
         color: black;
         font-weight: bold;
-        font-size: 1.1em;
         opacity: 0;
         z-index: 1000;
-        animation: fadeInOut 7s ease forwards; /* Animation over 7 seconds */
+        animation: fadeInOut 20s ease forwards;
       }
 
-      #server-alert p {
-        margin: 0;
-        padding: 0;
+      #info-alert h2 {
+        font-size: 2vw;
+        position: absolute;
+        top: 7.5vh;
+      }
+
+      #info-alert p {
+        border: 2px solid #4caf50;
+        border-radius: 10px;
+        padding: 1vw;
+        margin-left: 10vw;
+        margin-right: 10vw;
+        font-size: 1.5vw;
+        position: absolute;
+        top: 25vh;
+      }
+
+      #imgcontainer {
+        font-size: 1.3vw;
+        position: absolute;
+        bottom: 12vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: row;
+        gap: 10vw;
+      }
+
+      .imgcontain {
+        height: 20vh;
+        width: 20vh;
+      }
+
+      .pics {
+        object-fit: contain;
+        height: 20vh;
+        width: 20vh;
       }
 
       /* Fade in and out animation */
@@ -742,11 +776,37 @@
     </style>
   </head>
   <body>
-    <div id="server-alert">
+    <div id="info-alert">
+      <h2>OCT IMAGE CLASSIFICATION</h2>
       <p>
-        PLEASE ENSURE THE SERVER IS ACTIVE TO ACCESS ALL SITE FEATURES. IF IT IS
-        NOT RUNNING, KINDLY START THE SERVER.
+        Our platform offers a streamlined solution for early detection and
+        management of Age-related Macular Degeneration (AMD) and other retinal
+        diseases. Traditionally, diagnosing these conditions requires manual OCT
+        image evaluation by experts, which can delay critical care. By using
+        advanced deep learning, our site allows users to upload OCT scans and
+        quickly receive probability-based analyses, identifying images as either
+        healthy or AMD-affected.
+        <br>
+        <br>
+        <strong style="color: #2e7d32;">Initial server response may take a moment; please wait briefly.</strong>
       </p>
+      <div id="imgcontainer">
+        <div class="imgcontain">
+          <label class="label" style="color: #4caf50;">Developer</label>
+          <img src="./application/img/Abhinav.png" class="pics" />
+          <label class="label">Abhinav</label>
+        </div>
+        <div class="imgcontain">
+          <label class="label" style="color: #4caf50;">Researcher</label>
+          <img src="./application/img/Aditya.jpg" class="pics" />
+          <label class="label">Aditya</label>
+        </div>
+        <div class="imgcontain">
+          <label class="label" style="color: #4caf50;">Presenter</label>
+          <img src="./application/img/Rohan.jpg" class="pics" />
+          <label class="label">Rohan</label>
+        </div>
+      </div>
     </div>
     <nav>
       <ul id="ul1">
@@ -981,7 +1041,7 @@
       </div>
     </div>
     <section id="copywrite">
-      <p>&copy; 2024. All rights reserved. Made By Abhinav Panwar | Rohan Gupta | Aditya Agarwal</p>
+      <p>&copy; 2024. All rights reserved.</p>
     </section>
     <script>
       function toggleFolder(folderId) {
@@ -993,12 +1053,12 @@
         }
       }
 
+      const infoalert = document.getElementById("info-alert");
       setTimeout(() => {
-        const alert = document.getElementById("server-alert");
-        alert.style.display = "flex";
+        infoalert.style.display = "flex";
         setTimeout(() => {
-          alert.style.display = "none";
-        }, 8000);
+          infoalert.style.display = "none";
+        }, 20000);
       }, 3000);
 
       const fileInput = document.getElementById("imageInput");
@@ -1025,10 +1085,13 @@
         const formData = new FormData();
         formData.append("image", file);
 
-        const response = await fetch("https://oct-image-classification.onrender.com/predict", {
-          method: "POST",
-          body: formData,
-        });
+        const response = await fetch(
+          "https://oct-image-classification.onrender.com/predict",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
 
         if (response.ok) {
           fetchPrediction(); // Call fetchPrediction to get the result
@@ -1040,7 +1103,9 @@
       });
 
       async function fetchPrediction() {
-        const response = await fetch("https://oct-image-classification.onrender.com/get_result");
+        const response = await fetch(
+          "https://oct-image-classification.onrender.com/get_result"
+        );
         const resultDiv = document.getElementById("result1");
 
         if (response.ok) {
